@@ -3,6 +3,8 @@ var https   = require('https');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var dateFormat = require('dateformat');
+
 //Config
 var app     = express();
 var ip      = 'http://192.168.1.93';
@@ -27,6 +29,7 @@ router.use(function(req, res, next){
 router.get('/', function(req, res){
     var before=0;
     sess = req.session;
+    sess.price=0;
     function intervalFunc () {
 	  	var options = {
 	        "rejectUnauthorized": false,
@@ -37,18 +40,18 @@ router.get('/', function(req, res){
 	        	"content-type":"application/json"
 	        }
 	    };
-
-	    
-
+	 
 	    var GetReq = https.request(options, function(GetRes) {
 	        GetRes.on('data', function(chunk) {
+	        	var day= dateFormat(Date.now());
 	        	var eth = JSON.parse(chunk);
 	        		if (sess.price != eth.payload.last ) {
 	        			sess.price = eth.payload.last;
-	        			console.log(sess.price);
-	        		};	           
+	        			console.log(day+' | '+sess.price);
+	        		};	          
 	        });
 	    });
+
 	    GetReq.end();
 	    GetReq.on('error', function(e) {
 	        console.error(e);   
@@ -57,6 +60,7 @@ router.get('/', function(req, res){
 	}
 	setInterval(intervalFunc, 1500);
 });
+
 //Server On
 app.use('/', router);
 //Starter Server
