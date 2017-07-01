@@ -54,8 +54,7 @@ router.get('/', function(req, res){
 
 	    GetReq.end();
 	    GetReq.on('error', function(e) {
-	        console.error(e);   
-	        end(JSON.stringify(e));
+	        console.error(e);
 	    });
 	}
 	setInterval(intervalFunc, 1500);
