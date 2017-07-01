@@ -59,9 +59,11 @@ router.get('/', function(req, res){
 	    });
 	}
 	setInterval(intervalFunc, 1500);
+	res.end('Ver console');
 });
 
 //Server On
 app.use('/', router);
 //Starter Server
 app.listen(port);
+console.log('http://localhost:'+port);
